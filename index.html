@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andy Wang | Computational Linguistics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #fff; color: #111; overflow-x: hidden; }
+    .serif { font-family: 'Playfair Display', serif; }
+
+    /* ── Scroll-driven animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.fade-only { transform: none; }
+    .reveal.visible  { opacity: 1; transform: translateY(0); }
+
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+    .delay-4 { transition-delay: 0.45s; }
+    .delay-5 { transition-delay: 0.60s; }
+
+    /* ── Navigation ── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.4rem 2.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease;
+      border-bottom: 1px solid transparent;
+    }
+    #navbar.scrolled {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-color: rgba(0,0,0,0.07);
+    }
+
+    /* ── Image zoom on hover ── */
+    .img-zoom { overflow: hidden; }
+    .img-zoom img { transition: transform 0.7s cubic-bezier(0.16,1,0.3,1); width: 100%; height: 100%; object-fit: cover; }
+    .img-zoom:hover img { transform: scale(1.06); }
+
+    /* ── Responsive hero name ── */
+    .hero-name {
+      font-size: clamp(3.8rem, 10vw, 9rem);
+      line-height: 0.93;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── Large footer text ── */
+    .reach-text {
+      font-size: clamp(4.5rem, 13vw, 12rem);
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+    }
+
+    /* ── Section rhythm ── */
+    .section { padding: 6rem 2.5rem; }
+    .divider  { height: 1px; background: #e8e8e8; margin: 0 2.5rem; }
+
+    /* ── FAQ accordion ── */
+    .faq-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    .faq-body.open { max-height: 280px; }
+    .faq-icon { transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+    .faq-icon.open { transform: rotate(45deg); }
+
+    /* ── PDF canvas in card ── */
+    .pdf-card { overflow: hidden; }
+    .pdf-card canvas {
+      width: 100%;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .pdf-card:hover canvas { transform: scale(1.04); }
+
+    /* ── Underline link style ── */
+    .link-ul {
+      display: inline-block;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 1px;
+      transition: opacity 0.25s;
+    }
+    .link-ul:hover { opacity: 0.5; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ NAV ═══════════════════════ -->
+<nav id="navbar">
+  <span class="serif text-lg font-bold tracking-tight">Andy Wang</span>
+
+  <div class="hidden md:flex gap-8 text-sm text-gray-500">
+    <a href="#about"     class="hover:text-black transition-colors duration-200">About</a>
+    <a href="#research"  class="hover:text-black transition-colors duration-200">Research</a>
+    <a href="#interests" class="hover:text-black transition-colors duration-200">Interests</a>
+    <a href="#faq"       class="hover:text-black transition-colors duration-200">FAQ</a>
+    <a href="#contact"   class="hover:text-black transition-colors duration-200">Contact</a>
+  </div>
+
+  <a href="mailto:andy92010111@gmail.com" class="text-sm text-gray-400 hover:text-black transition-colors duration-200">
+    andy92010111@gmail.com
+  </a>
+</nav>
+
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section class="min-h-screen flex items-center pt-24 pb-16 px-10 md:px-16">
+  <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-16 items-center">
+
+    <!-- Left -->
+    <div>
+      <p class="text-xs text-gray-400 uppercase tracking-widest mb-6 reveal">
+        1st Year MA · LOPE Lab · National Taiwan University
+      </p>
+      <h1 class="hero-name serif font-black reveal delay-1">
+        Andy<br>Wang
+      </h1>
+      <p class="mt-8 text-lg text-gray-500 leading-relaxed max-w-md reveal delay-2">
+        You can also call me yu-chieh.
+      </p>
+      <div class="mt-10 flex gap-7 reveal delay-3">
+        <a href="#research" class="text-sm link-ul">View Research →</a>
+        <a href="#contact"  class="text-sm text-gray-400 link-ul">Get in Touch</a>
+      </div>
+    </div>
+
+    <!-- Right: photo grid -->
+    <div class="grid grid-cols-2 gap-3 reveal fade-only delay-4">
+      <div class="img-zoom rounded-2xl aspect-[3/4] bg-stone-100">
+        <img src="assets/photo1.jpg" alt="Photo"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="img-zoom rounded-2xl aspect-square bg-stone-200 mt-10">
+        <img src="assets/photo2.jpg" alt="Photo"
+             onerror="this.style.display='none'">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ═══════════════════════ ABOUT ═══════════════════════ -->
+<section id="about" class="section">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12">
+
+    <div class="reveal">
+      <p class="text-xs text-gray-400 uppercase tracking-widest mb-4">About</p>
+      <h2 class="serif text-4xl font-bold leading-snug">A little about<br><em>who I am</em></h2>
+    </div>
+
+    <div class="md:col-span-2 reveal delay-2">
+      <p class="text-gray-600 text-lg leading-relaxed mb-5">
+        I'm a 1st year MA student in the Linguistics department at National Taiwan University
+        and a member of the <a href="https://lope.linguistics.ntu.edu.tw" target="_blank" class="link-ul">LOPE Lab</a>.
+        My work sits at the intersection of computational linguistics and natural language processing —
+        from building diachronic lexical resources to probing how large language models handle non-standard language.
+      </p>
+      <p class="text-gray-600 text-lg leading-relaxed">
+        When I'm not (trying to) deep-dive into Computational Linguistics,
+        I'm probably buffering with Gummy B on repeat.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ═══════════════════════ RESEARCH ═══════════════════════ -->
+<section id="research" class="section">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="mb-12">
+      <p class="text-xs text-gray-400 uppercase tracking-widest mb-2 reveal">Research</p>
+      <h2 class="serif text-5xl font-bold reveal delay-1">Things I Study</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <!-- Card 1 -->
+      <article class="group reveal delay-1">
+        <div class="pdf-card rounded-2xl aspect-[4/3] bg-stone-100 mb-5">
+          <canvas id="pdf-canvas-1"></canvas>
+        </div>
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Co-author · Computational Linguistics</p>
+        <h3 class="serif text-xl font-bold mb-2 group-hover:text-gray-400 transition-colors duration-300">
+          Automated Framework for Diachronic Chinese WordNet Construction with Diachronic Contextual Embedding
+        </h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          A framework for automatically constructing Chinese WordNets across historical time periods using diachronic contextual embeddings to capture semantic shift.
+        </p>
+        <a href="assets/Paper 1.pdf" target="_blank" class="mt-3 inline-block text-sm link-ul">Read paper →</a>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="group reveal delay-2">
+        <div class="pdf-card rounded-2xl aspect-[4/3] bg-slate-100 mb-5">
+          <canvas id="pdf-canvas-2"></canvas>
+        </div>
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Co-author · NLP / Large Language Models</p>
+        <h3 class="serif text-xl font-bold mb-2 group-hover:text-gray-400 transition-colors duration-300">
+          Layer-Wise Distinction of Slang Types in Large Language Models
+        </h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          An investigation into how different layers of large language models encode and distinguish slang categories, probing the internal representations of non-standard language.
+        </p>
+        <a href="assets/Paper 2.pdf" target="_blank" class="mt-3 inline-block text-sm link-ul">Read paper →</a>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="group reveal delay-3">
+        <div class="pdf-card rounded-2xl aspect-[4/3] bg-zinc-100 mb-5">
+          <canvas id="pdf-canvas-3"></canvas>
+        </div>
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Sole Author · Computational Narratology</p>
+        <h3 class="serif text-xl font-bold mb-2 group-hover:text-gray-400 transition-colors duration-300">
+          Bridging Narrative Theory and Computational Models: Testing the Transitivity Hypothesis via Parameter-Guided Inference
+        </h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          A study bridging classical narrative theory with computational approaches, testing the Transitivity Hypothesis through parameter-guided inference in language models.
+        </p>
+        <a href="assets/Paper 3.pdf" target="_blank" class="mt-3 inline-block text-sm link-ul">Read paper →</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════ PULL QUOTE ═══════════════════════ -->
+<section class="section" style="padding-top: 7rem; padding-bottom: 7rem;">
+  <div class="max-w-4xl mx-auto text-center reveal">
+    <p class="serif text-3xl md:text-5xl font-medium italic leading-tight text-gray-700">
+      "hmmm...this is a quote."
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ═══════════════════════ INTERESTS ═══════════════════════ -->
+<section id="interests" class="section">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="mb-12">
+      <p class="text-xs text-gray-400 uppercase tracking-widest mb-2 reveal">Beyond the Lab</p>
+      <h2 class="serif text-5xl font-bold reveal delay-1">Interests</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="img-zoom rounded-2xl aspect-square bg-stone-100 relative reveal delay-1">
+        <img src="assets/interest1.jpg" alt="Interest 1" onerror="this.style.display='none'">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent rounded-2xl pointer-events-none"></div>
+        <p class="absolute bottom-4 left-4 text-white text-sm font-medium">Basketball</p>
+      </div>
+      <div class="img-zoom rounded-2xl aspect-square bg-slate-100 relative mt-8 reveal delay-2">
+        <img src="assets/interest2.jpg" alt="Music" onerror="this.style.display='none'">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent rounded-2xl pointer-events-none"></div>
+        <p class="absolute bottom-4 left-4 text-white text-sm font-medium">Music</p>
+      </div>
+      <div class="img-zoom rounded-2xl aspect-square bg-zinc-100 relative reveal delay-3">
+        <img src="assets/interest3.jpg" alt="Sprinting" onerror="this.style.display='none'">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent rounded-2xl pointer-events-none"></div>
+        <p class="absolute bottom-4 left-4 text-white text-sm font-medium">Sprinting</p>
+      </div>
+      <div class="img-zoom rounded-2xl aspect-square bg-neutral-100 relative mt-8 reveal delay-4">
+        <img src="assets/interest4.jpg" alt="Drawing stuff" onerror="this.style.display='none'">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent rounded-2xl pointer-events-none"></div>
+        <p class="absolute bottom-4 left-4 text-white text-sm font-medium">Drawing stuff</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ═══════════════════════ FUN FACTS ═══════════════════════ -->
+<section id="funfacts" class="section">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="mb-12">
+      <p class="text-xs text-gray-400 uppercase tracking-widest mb-2 reveal">Quick Takes</p>
+      <h2 class="serif text-5xl font-bold reveal delay-1">Fun Facts</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-10">
+      <div class="reveal delay-1">
+        <p class="serif text-7xl font-black text-gray-300 select-none mb-3">01</p>
+        <p class="text-gray-700 leading-relaxed">
+          I share a birthday with @Ice Spice and @王世堅.
+        </p>
+      </div>
+      <div class="reveal delay-2">
+        <p class="serif text-7xl font-black text-gray-300 select-none mb-3">02</p>
+        <p class="text-gray-700 leading-relaxed">
+          [More coming soon.]
+        </p>
+      </div>
+      <div class="reveal delay-3">
+        <p class="serif text-7xl font-black text-gray-300 select-none mb-3">03</p>
+        <p class="text-gray-700 leading-relaxed">
+          [More coming soon, maybe.]
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ═══════════════════════ FAQ ═══════════════════════ -->
+<section id="faq" class="section">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12">
+
+    <div class="reveal">
+      <p class="text-xs text-gray-400 uppercase tracking-widest mb-4">FAQ</p>
+      <h2 class="serif text-4xl font-bold leading-snug">Questions<br>people ask<br>(not really)</h2>
+    </div>
+
+    <div class="md:col-span-2 reveal delay-2">
+
+      <!-- Q1 -->
+      <div class="faq-item border-b border-gray-200 py-5 cursor-pointer select-none">
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium text-gray-900 pr-4">What is your research about?</h3>
+          <span class="faq-icon text-gray-400 text-2xl leading-none flex-shrink-0">+</span>
+        </div>
+        <div class="faq-body">
+          <p class="text-gray-500 text-sm leading-relaxed pt-4">
+            My research is in Computational Linguistics, specifically how language changes over time
+            and how non-standard language (like slang) is represented in large language models.
+            I work within the LOPE Lab at National Taiwan University.
+          </p>
+        </div>
+      </div>
+
+
+      <!-- Q3 -->
+      <div class="faq-item border-b border-gray-200 py-5 cursor-pointer select-none">
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium text-gray-900 pr-4">Where are you currently based?</h3>
+          <span class="faq-icon text-gray-400 text-2xl leading-none flex-shrink-0">+</span>
+        </div>
+        <div class="faq-body">
+          <p class="text-gray-500 text-sm leading-relaxed pt-4">
+            I'm currently based in Taipei, Taiwan, studying at National Taiwan University.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="faq-item border-b border-gray-200 py-5 cursor-pointer select-none">
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium text-gray-900 pr-4">How can I access your publications?</h3>
+          <span class="faq-icon text-gray-400 text-2xl leading-none flex-shrink-0">+</span>
+        </div>
+        <div class="faq-body">
+          <p class="text-gray-500 text-sm leading-relaxed pt-4">
+            Most papers are on this website.
+            If you can't access one, feel free to email me.
+          </p>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="faq-item border-b border-gray-200 py-5 cursor-pointer select-none">
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium text-gray-900 pr-4">Your fav food?</h3>
+          <span class="faq-icon text-gray-400 text-2xl leading-none flex-shrink-0">+</span>
+        </div>
+        <div class="faq-body">
+          <p class="text-gray-500 text-sm leading-relaxed pt-4">
+            Bruh. 雞排.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════ CONTACT ═══════════════════════ -->
+<section id="contact" style="background:#111; padding: 8rem 2.5rem 5rem;">
+  <div class="max-w-7xl mx-auto">
+
+    <p class="text-xs text-gray-500 uppercase tracking-widest mb-6 reveal">Contact</p>
+    <h2 class="reach-text serif font-black text-white mb-14 reveal delay-1">
+      Reach<br>Out
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-8 border-t border-gray-800 pt-10">
+      <div class="reveal delay-1">
+        <p class="text-xs text-gray-500 uppercase tracking-widest mb-3">Email</p>
+        <a href="mailto:andy92010111@gmail.com"
+           class="text-white text-sm hover:text-gray-400 transition-colors duration-200">
+          andy92010111@gmail.com
+        </a>
+      </div>
+      <div class="reveal delay-2">
+        <p class="text-xs text-gray-500 uppercase tracking-widest mb-3">Academic</p>
+        <a href="https://lope.linguistics.ntu.edu.tw/" target="_blank"
+           class="text-white text-sm hover:text-gray-400 transition-colors duration-200 block mb-2">
+          LOPE
+        </a>
+      </div>
+      <div class="reveal delay-3">
+        <p class="text-xs text-gray-500 uppercase tracking-widest mb-3">Social</p>
+        <a href="https://www.linkedin.com/in/yu-chieh-wang-465a27362/" target="_blank"
+           class="text-white text-sm hover:text-gray-400 transition-colors duration-200 block">
+          LinkedIn
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer style="background:#111; border-top: 1px solid #1f1f1f; padding: 1.5rem 2.5rem;">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <p class="text-gray-600 text-xs">© 2026 Andy Wang</p>
+    <p class="text-gray-600 text-xs">Built with my heart.</p>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════ JS ═══════════════════════ -->
+<script>
+  // ── Scroll reveal (Apple-style fade+lift) ──────────────────────────────
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target); // animate once
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Fire for elements already in viewport on load
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) {
+        el.classList.add('visible');
+      }
+    });
+  });
+
+  // ── Nav glass effect on scroll ─────────────────────────────────────────
+  const navbar = document.getElementById('navbar');
+  const onScroll = () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ── FAQ accordion ──────────────────────────────────────────────────────
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const body = item.querySelector('.faq-body');
+      const icon = item.querySelector('.faq-icon');
+      const isOpen = body.classList.contains('open');
+
+      // close all
+      document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.faq-icon').forEach(i => {
+        i.textContent = '+';
+        i.classList.remove('open');
+      });
+
+      // open this one if it was closed
+      if (!isOpen) {
+        body.classList.add('open');
+        icon.textContent = '×';
+        icon.classList.add('open');
+      }
+    });
+  });
+</script>
+
+<script>
+  // ── PDF preview rendering ───────────────────────────────────────────────
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  async function renderPDFPreview(pdfPath, canvasId) {
+    try {
+      const pdf  = await pdfjsLib.getDocument(pdfPath).promise;
+      const page = await pdf.getPage(1);
+      const canvas    = document.getElementById(canvasId);
+      const container = canvas.parentElement;
+      const scale     = container.clientWidth / page.getViewport({ scale: 1 }).width;
+      const viewport  = page.getViewport({ scale });
+      canvas.width  = viewport.width;
+      canvas.height = viewport.height;
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    } catch (e) {
+      // silently fail if PDF not yet added — card shows placeholder bg colour
+    }
+  }
+
+  renderPDFPreview('assets/Paper 1.pdf', 'pdf-canvas-1');
+  renderPDFPreview('assets/Paper 2.pdf', 'pdf-canvas-2');
+  renderPDFPreview('assets/Paper 3.pdf', 'pdf-canvas-3');
+</script>
+
+</body>
+</html>
